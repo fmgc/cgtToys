@@ -5,7 +5,7 @@ import pydot
 import re
 
 #
-# TESTE NO GIT
+# TESTE NO GIT DOIS
 #
 
 g = pydot.graph_from_dot_file(sys.argv[1])
