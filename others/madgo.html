@@ -1,0 +1,35 @@
+<html> 
+	<head> 
+		<script> 
+			function gogo () { 
+				alert ("gogo"); 
+				var url = "http://localhost:8080/admin"; 
+				var ajax = new XMLHttpRequest(); 
+				if (! ajax) { 
+					alert ("Failed"); 
+				} 
+				ajax.open("GET", url, true); 
+				alert ("gogo"); 
+				ajax.onreadystatechange = function(){ 
+					alert(ajax.readyState+"  "+ajax.status+"  "+ajax.statusText) 
+					if (ajax.readyState == 4) { 
+						if (ajax.status == 200) { 
+							var ret = ajax.responseText; 
+							alert("You got "+ret); 
+						} else { 
+							alert ("Status is "+ajax.status); 
+						} 
+					} 
+				} 
+				if(ajax.readyState == 0) { 
+					alert("error:"+ajax.readyState+'  '+ajax.responseText); 
+				} 
+				ajax.send(""); 
+			} 
+
+		</script>
+	</head>	
+	<body> 
+		<input type="submit" onclick = "gogo()"> 
+	</body> 
+</html>

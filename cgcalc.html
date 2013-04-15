@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang = "en">
+	<head>
+		<meta charset = "UTF-8">
+		<title>
+			Combinatorial Game Calculator
+		</title>
+		<style type = "text/css">
+			.inputarea {
+				border: 2px solid;
+				border-color: gray;
+				border-radius: 4px;
+				padding: 2px;
+				background-color: white;
+				font-family: monospace;
+				width: 48ex;
+			}
+
+			.outputarea {
+				border: 2px solid;
+				border-radius: 4px;
+				border-color: gray;
+				padding: 2px;
+				background-color: gainsboro;
+				font-family: monospace;
+				width: 48ex;
+			}
+
+			.eval_button {
+				font-size: xx-large;
+			}
+
+			.inexpr {
+				color: navy;
+			}
+			
+			.outexpr {
+				color: maroon;
+			}
+
+			.formula {
+				text-align: center;
+			}
+		
+		</style>
+
+		<script type = "text/javascript"
+			src = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+		<script type = "text/javascript">
+
+var xhr;	
+var url = "/cgcalc";
+var sent_expression;
+var cgc_prompt, cgc_board; 		
+var prompt_count = 0;
+var input_processed = false;
+
+function clear_input() {
+	prompt_count++;
+	cgc_prompt.innerHTML = "";
+	cgc_prompt.focus();
+}
+
+function read_input() {
+	var x = cgc_prompt.value;
+	cgc_prompt.value = "";
+	return x;
+}
+
+function write_result(x,y) {
+	var result_line = "<span class=\"inexpr\">In["+prompt_count+"]:</span>"+x+"<br>"; 
+	result_line = result_line+"<span class=\"outexpr\">Out["+prompt_count+"]:</span><div id=\"formula"+prompt_count+"\" class=\"formula\">\\("+y+"\\)</div>";
+	cgc_board.innerHTML = result_line + cgc_board.innerHTML;
+	var fmla = document.getElementById( "formula"+prompt_count );
+	MathJax.Hub.Queue( ["Typeset", MathJax.Hub, fmla] );
+}
+
+function read_send() {
+	var x = read_input();
+	input_processed = false;
+	xhr.open("GET", url +  "?x="+x, true);
+	xhr.send();
+	sent_expression = x;
+}
+
+function is_valid(y) {
+	if (y.indexOf("CGCalc:OK") == 0) {
+		return y.slice(9);
+	} else {
+		return false;
+	}
+}
+
+function get_print() {
+	var y = is_valid(xhr.responseText);
+	if (y && !input_processed) {
+		write_result( sent_expression, y );
+		input_processed = true;
+		clear_input();
+	}
+}
+
+function  main() {
+	cgc_prompt = document.getElementById("cgc_prompt");
+	cgc_board = document.getElementById("cgc_board");
+	cgc_prompt.rows = 4;
+	xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = get_print;
+	clear_input();
+}
+		</script>
+
+	</head>
+	<body onload = "main()">
+		<div id = "sheet" class = "sheet">
+			<button id = "eval_button"
+				tabindex = "2"
+				class = "eval_button" 
+				onclick = "read_send()">  Eval  </button>
+			<br>
+			<textarea id = "cgc_prompt"
+				autofocus
+				tabindex = "1"
+				class = "inputarea"></textarea>
+			<br>
+			<div id = "cgc_board" class = "outputarea">
+				Welcome to CGCalc.<br>
+				Type an expression in the text area above and press the "Eval" button to get the result here.<br>
+			   Have fun.	
+			</div>
+		</div>
+	</body>
+</html>
