@@ -63,9 +63,11 @@ public class CGCalc extends Thread {
 				} else if (httpQueryString.startsWith("/cgcalc")) {
 					responseCode = 200;
 					String[] args = httpQueryString.split("\\?");
-					String expr = args[1].split("=")[1];
-					responseString = "CGCalc:OK"+CGCalc.eval( expr );
-
+					String[] expr = args[1].split("=");
+					if (expr.length >= 2)
+						responseString = "CGCalc:OK"+CGCalc.eval( expr[1] );
+					else
+						responseString = "CGCalc:NOK";
 				} else {
 					responseCode = 404;
 					responseString = "<b>The Requested resource not found ...." +

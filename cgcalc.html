@@ -6,6 +6,12 @@
 			Combinatorial Game Calculator
 		</title>
 		<style type = "text/css">
+			textarea {
+				width: 100%; 
+				border: none;
+				padding: 0px;
+			}
+
 			.inputarea {
 				border: 2px solid;
 				border-color: gray;
@@ -13,7 +19,7 @@
 				padding: 2px;
 				background-color: white;
 				font-family: monospace;
-				width: 48ex;
+				width: 100%;
 			}
 
 			.outputarea {
@@ -23,7 +29,7 @@
 				padding: 2px;
 				background-color: gainsboro;
 				font-family: monospace;
-				width: 48ex;
+				width: 100%;
 			}
 
 			.eval_button {
@@ -58,7 +64,6 @@ var input_processed = false;
 function clear_input() {
 	prompt_count++;
 	cgc_prompt.innerHTML = "";
-	cgc_prompt.focus();
 }
 
 function read_input() {
@@ -81,6 +86,7 @@ function read_send() {
 	xhr.open("GET", url +  "?x="+x, true);
 	xhr.send();
 	sent_expression = x;
+	cgc_prompt.focus();
 }
 
 function is_valid(y) {
@@ -118,10 +124,11 @@ function  main() {
 				class = "eval_button" 
 				onclick = "read_send()">  Eval  </button>
 			<br>
-			<textarea id = "cgc_prompt"
-				autofocus
-				tabindex = "1"
-				class = "inputarea"></textarea>
+			 <div class = "inputarea">
+				<textarea id = "cgc_prompt"
+					autofocus
+					tabindex = "1"></textarea>
+			</div>
 			<br>
 			<div id = "cgc_board" class = "outputarea">
 				Welcome to CGCalc.<br>
